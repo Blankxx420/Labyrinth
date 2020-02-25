@@ -11,6 +11,7 @@ class Maze:
 		with open(self.file , 'r') as file:
 			for line in file:
 				line_level = []
+				print(line_level)
 				for char in line:
 					if char != '\n':
 						line_level.append(char)
@@ -19,7 +20,7 @@ class Maze:
 			
 
 
-	def displaying(self, window):
+	def displaying(self, Window):
 		wall = pygame.image.load(WALL).convert()
 		start = pygame.image.load(START).convert()
 		guardian = pygame.image.load(GUARDIAN).convert()
@@ -30,20 +31,20 @@ class Maze:
 		for line in self.mymaze:
 		 	num_char = 0
 		 	for char in line:
-		 		x = num_line * heigth_sprite
-		 		y = num_char * heigth_sprite
+		 		x = num_line * HEIGTH_SPRITE
+		 		y = num_char * HEIGTH_SPRITE
 
 		 		if char == 'X':
-		 			window.blit(wall, (y,x))
+		 			Window.blit(wall, (y,x))
 
 		 		elif char == 'B':
-		 			window.blit(start, (y,x))
+		 			Window.blit(start, (y,x))
 
 		 		elif char == 'A':
-		 			window.blit(guardian, (y,x))
+		 			Window.blit(guardian, (y,x))
 
 		 		elif char == '@':
-		 			window.blit(ground, (y,x))
+		 			Window.blit(ground, (y,x))
 		 		num_char += 1
 		 	num_line += 1
 
