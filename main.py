@@ -11,74 +11,60 @@ so he can put to sleep the guard at the exit !
 
 import pygame
 from pygame.locals import *
-from maze import *
 from constant import *
+from maze import *
+from items import *
+from player import *
 import time
 
 
 
 pygame.init()
-
-Window = pygame.display.set_mode((SPRITE, SPRITE))
-
+window = pygame.display.set_mode((SPRITE, SPRITE))
 maze = Maze("Level_1.txt")
-
 maze.get_maze()
-
 mg_player = Player(maze.mymaze)
-
-Loot = Items(maze.mymaze)
-
-Ground = pygame.image.load(GROUND).convert()
-
-Looser = pygame.image.load(LOOSE).convert_alpha()
-
-Winner = pygame.image.load(WIN).convert_alpha()
-
-Homepage = pygame.image.load(HOMEP).convert()
-
+loot = Items(maze.mymaze)
+ground = pygame.image.load(GROUND).convert()
+looser = pygame.image.load(LOOSE).convert_alpha()
+winner = pygame.image.load(WIN).convert_alpha()
+homepage = pygame.image.load(HOMEP).convert()
 img_macgyver = pygame.image.load(mg_player.p_mg).convert()
-
-img_tube = pygame.image.load(Loot.tube).convert_alpha()
-
-img_ether = pygame.image.load(Loot.ether).convert_alpha()
-
-img_syringe = pygame.image.load(Loot.syringe).convert_alpha()
-
+img_tube = pygame.image.load(loot.tube).convert_alpha()
+img_ether = pygame.image.load(loot.ether).convert_alpha()
+img_syringe = pygame.image.load(loot.syringe).convert_alpha()
 background = pygame.image.load(BACKGROUND).convert()
+loot.random_pos(window)
+tubenotpicked = True
+ethernotpicked = True
+syringenotpicked = True
+game = False
+home = True
+game_win = False
+game_loose = False
 
-Loot.random_pos(Window)
+while home:
 
-TubeNotPicked = True
-EtherNotPicked = True
-SyringeNotPicked = True
-GAME = False
-HOME = True
-GameWin = False
-Game_loose = False
-
-while HOME:
-
-	Window.blit(Homepage , (0, 0))
+	window.blit(homepage , (0, 0))
 	pygame.display.flip()
 	pygame.display.update()
 
 	for event in pygame.event.get():
 		if event.type == pygame.KEYDOWN:
 			if event.key == K_RETURN:
-				HOME = False
-				GAME = True
+				home = False
+				game = True
 			elif event.key == K_ESCAPE:
-				HOME = False
+				home = False
 				pygame.quit()
 				quit()
 
 
-	while GAME:
+	while game:
 
-		Background = pygame.image.load(BACKGROUND).convert()
+		background = pygame.image.load(BACKGROUND).convert()
 		
-		maze.displaying(Window)
+		maze.displaying(window)
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_ESCAPE:
@@ -99,54 +85,58 @@ while HOME:
 				elif event.key == pygame.K_DOWN:
 					mg_player.move("down") 
 
-		Window.blit(background, (0 , 0))
-		maze.displaying(Window)
+		window.blit(background, (0 , 0))
+		maze.displaying(window)
 		pygame.key.set_repeat(400, 400)
 
 	    # event for picking up object
-		Window.blit(img_tube, Loot.positions[0])
-		if (mg_player.case_x, mg_player.case_y) == Loot.positions[0]:
-			Loot.positions[0] = ((14 * HEIGTH_SPRITE), 0)
-			TubeNotPicked = False
+		window.blit(img_tube, loot.positions[0])
+		if (mg_player.case_x, mg_player.case_y) == loot.positions[0]:
+			loot.positions[0] = ((14 * HEIGTH_SPRITE), 0)
+			tubenotpicked = False
+			
 			
 
-		Window.blit(img_ether, Loot.positions[1])
-		if (mg_player.case_x, mg_player.case_y) == Loot.positions[1]:
-			Loot.positions[1] = ((12 * HEIGTH_SPRITE) , 0)
-			EtherNotPicked = False
+		window.blit(img_ether, loot.positions[1])
+		if (mg_player.case_x, mg_player.case_y) == loot.positions[1]:
+			loot.positions[1] = ((12 * HEIGTH_SPRITE) , 0)
+			ethernotpicked = False
 			
 
-		Window.blit(img_syringe, Loot.positions[2])
-		if (mg_player.case_x, mg_player.case_y) == Loot.positions[2]:
-			Loot.positions[2] = ((13 * HEIGTH_SPRITE) , 0)
-			SyringeNotPicked = False
+		window.blit(img_syringe, loot.positions[2])
+		if (mg_player.case_x, mg_player.case_y) == loot.positions[2]:
+			loot.positions[2] = ((13 * HEIGTH_SPRITE) , 0)
+			syringenotpicked = False
+			
 
-		Window.blit(img_macgyver, (mg_player.case_x, mg_player.case_y))
+		window.blit(img_macgyver, (mg_player.case_x, mg_player.case_y))
 
 		if maze.mymaze[mg_player.num_y][mg_player.num_x] == 'A':
-			if TubeNotPicked is False and EtherNotPicked is False and SyringeNotPicked is False:
-				GameWin = True
+			if tubenotpicked is False and ethernotpicked is False and syringenotpicked is False:
+				game_win = True
 			else:
-				Game_loose = True
+				game_loose = True
 
-		if GameWin is True:
-			Window.blit(Ground, (0, 0))
-			Window.blit(Winner, ((3 * HEIGTH_SPRITE), 7))
-			if event.key == K_RETURN: 
-				HOME = True
-				GAME = False
-
-
-		if Game_loose is True:		
-			Window.blit(Ground, (0 , 0))
-			Window.blit(Looser, ((5 * HEIGTH_SPRITE), 7))
+		if game_win is True:
+			window.blit(ground, (0, 0))
+			window.blit(winner, ((3 * HEIGTH_SPRITE), 7))
 			if event.key == K_RETURN:
-				GAME = False
-				HOME = True
+				
+				home = True
+				game = False
+				
+
+		if game_loose is True:		
+			window.blit(ground, (0 , 0))
+			window.blit(looser, ((5 * HEIGTH_SPRITE), 7))
+			if event.key == K_RETURN:
+				game = False
+				home = True
+				
 			
 			if event.key == K_n:
-				GAME = False
-				HOME = True
+				game = False
+				home = False
 
 
 		pygame.display.flip()

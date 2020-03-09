@@ -11,8 +11,9 @@ class Items:
 		self.syringe = SYRINGE
 		self.loaded = True
 		self.positions = []
+	
 
-	def random_pos(self, Window):
+	def random_pos(self, window):
 		for x in range(3):
 			while True:
 				num_x = random.randrange(0, 14)

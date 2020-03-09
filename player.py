@@ -14,6 +14,7 @@ class Player():
 		self.num_x = 0
 		self.num_y = 0
 		self.maze = maze
+		
 
 	#function of moving the player
 	def move(self, direction):
