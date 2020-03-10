@@ -20,7 +20,7 @@ class Player():
 	#function of moving the player
 	def move(self, direction):
 
-		if (self.maze.structure[self.num_y][self.num_x]== 'i'):
+		if (self.maze.structure[self.num_y][self.num_x] == 'i'):
 				self.inventory += 1
 				self.maze.structure[self.num_y][self.num_x] = '@'
 
