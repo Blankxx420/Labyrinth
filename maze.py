@@ -1,20 +1,35 @@
 import pygame
+from pygame.locals import *
 from constant import *
 from player import *
 from items import *
 class Maze:
 	def __init__(self, file):
 		self.file = file
-		self.mymaze = []
+		self.structure = 0
+		self.free_path = set()
+		self.__get_maze()
 
-	def get_maze(self):
+	def __get_maze(self):
 		with open(self.file , 'r') as file:
+			mymaze =[]
+			num_line = 0
 			for line in file:
 				line_level = []
+				num_char = 0
 				for char in line:
 					if char != '\n':
 						line_level.append(char)
-				self.mymaze.append(line_level)
+						if char == '@':
+							self.free_path.add((num_line, num_char))
+					num_char += 1
+				num_line += 1
+				mymaze.append(line_level)
+				num_char += 1
+
+			self.structure = mymaze
+
+
 		
 			
 
@@ -27,7 +42,7 @@ class Maze:
 		ground = pygame.image.load(GROUND).convert()
 		
 		num_line = 0
-		for line in self.mymaze:
+		for line in self.structure:
 		 	num_char = 0
 		 	for char in line:
 		 		x = num_line * HEIGTH_SPRITE
