@@ -6,7 +6,7 @@ pick up objects along the way in order to conceive a siringue of chemical
 so he can put to sleep the guard at the exit !
 
  Python Script
- Files : maze.py, items.py, constantes.py, player.py , level_1.txt , Images + sound
+ Files : maze.py, items.py, constantes.py, player.py , level_1.txt , Images 
  """
 
 import pygame
@@ -17,62 +17,62 @@ from items import *
 from player import *
 import time
 
-def end(x,y):
-	if maze.structure[x][y] == 'A':
+def end(y, x):
+	"""Function of winning condtion"""
+	if maze.structure[y][x] == 'A':
 		if mg_player.inventory == 3:
-			window.blit(winner, (50, 50))
+			window.blit(winner, (120, 120))
 		else:
-			window.blit(looser, (50, 50))
+			window.blit(looser, (150, 150))
 		pygame.display.flip()
-		pygame.time.delay(5000)
+		pygame.time.delay(3000)
 		return False
 	else:
 		return True
 
-pygame.init()
-window = pygame.display.set_mode((SPRITE, SPRITE))
-ground = pygame.image.load(GROUND).convert()
-looser = pygame.image.load(LOOSE).convert_alpha()
-winner = pygame.image.load(WIN).convert_alpha()
-homepage = pygame.image.load(HOMEP).convert()
 
+pygame.init()
+"""setting the window"""
+window = pygame.display.set_mode((SPRITE, SPRITE))
+""" load image of menu """
+homepage = pygame.image.load(HOMEP).convert()
 
 game = False
 home = True
 
-
+"""MAIN LOOP"""
 while home:
-
+	"""homepage mmenu of the game"""
 	window.blit(homepage , (0, 0))
 	pygame.display.flip()
 	pygame.display.update()
-	pygame.time.Clock().tick(30)
-	for event in pygame.event.get():
+
+	"""event for quiting menu and game"""
+	for event in pygame.event.get():		
 		if event.type == pygame.KEYDOWN:
 			if event.key == K_RETURN:
-				home = False
+				home = False				
 				game = True
 			elif event.key == K_ESCAPE:
 				home = False
 				pygame.quit()
 				quit()
-
-
+	"""load of level """
+	maze = Maze("Level_1.txt")
+	"""creation of items in level"""
+	tube = Items(TUBE, maze)
+	syringe = Items(SYRINGE, maze)
+	ether = Items(ETHER, maze)
+	"""creation of player"""
+	mg_player = Player(maze)
+	looser = pygame.image.load(LOOSE).convert_alpha()
+	winner = pygame.image.load(WIN).convert_alpha()
+	"""GAME LOOP"""
 	while game:
-		"""Generation of level by file"""
-		maze = Maze("Level_1.txt")
-		maze.displaying(window)
-		background = pygame.image.load(BACKGROUND).convert()
-
-		"""Creation of player"""
-		mg_player = Player(maze.structure)
 		img_macgyver = pygame.image.load(mg_player.p_mg).convert()
-		looser = pygame.image.load(LOOSE).convert_alpha()
-		winner = pygame.image.load(WIN).convert_alpha()
-		"""placement of the items"""
-		tube = Items(TUBE, maze)
-		syringe = Items(SYRINGE, maze)
-		ether = Items(ETHER, maze)
+		
+		maze.displaying(window)
+		"""limitation speedc of the loop """
 		pygame.time.Clock().tick(30)
 		for event in pygame.event.get():
 			if event.type == pygame.KEYDOWN:
@@ -94,17 +94,23 @@ while home:
 				elif event.key == pygame.K_DOWN:
 					mg_player.move("down") 
 
-		window.blit(background, (0 , 0))
-		maze.displaying(window)
+		""" displaying image of player character"""
 		window.blit(img_macgyver, (mg_player.case_x, mg_player.case_y))
+
+		"""verify in text file if "i" is present"""
 		if(maze.structure[tube.case_y][tube.case_x] == 'i'):
+			"""if present display image at the "i" position"""
 			window.blit(tube.image, (tube.x, tube.y))
 		if(maze.structure[ether.case_y][ether.case_x] == 'i'):
 			window.blit(ether.image, (ether.x, ether.y))
 		if(maze.structure[syringe.case_y][syringe.case_x] == 'i'):
 			window.blit(syringe.image, (syringe.x, syringe.y))
+		# if player is on A call function end 
+		game = end(mg_player.num_y, mg_player.num_x)
+
 		pygame.display.flip()
-		game = end(mg_player.case_y, mg_player.case_x)
+		pygame.display.update()
+		
 
 
 
