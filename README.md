@@ -6,7 +6,7 @@ Macgyver is trapped in a labyrinth and must collect all the items randomly dropp
 
 # Getting Started
 
-Install the required files with "pip install -r requirements.txt"
+Install the required files with main executable in build files
 
 Launch the game with "python3 main.py"
 
