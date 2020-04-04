@@ -1,4 +1,2 @@
-python==3.8
 pygame==2.0.0.dev7
-random
-time
+
