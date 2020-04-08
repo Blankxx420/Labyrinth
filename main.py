@@ -100,11 +100,20 @@ while home:
             # if present display image at the "i" position
             window.blit(tube.image, (tube.x, tube.y))
 
+        elif (maze.structure[tube.case_y][tube.case_x] == '@'):
+            window.blit(tube.image, (400, 0))
+
         if(maze.structure[ether.case_y][ether.case_x] == 'i'):
             window.blit(ether.image, (ether.x, ether.y))
 
+        elif (maze.structure[ether.case_y][ether.case_x] == '@'):
+            window.blit(ether.image, (420, 0))
+
         if(maze.structure[syringe.case_y][syringe.case_x] == 'i'):
             window.blit(syringe.image, (syringe.x, syringe.y))
+
+        elif (maze.structure[syringe.case_y][syringe.case_x] == '@'):
+            window.blit(syringe.image, (380, 0))
         # if player is on A call function end
         game = end(mg_player.num_y, mg_player.num_x)
 
